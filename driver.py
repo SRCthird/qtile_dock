@@ -2,6 +2,7 @@ import sys
 import socket
 import threading
 from PyQt5 import QtWidgets
+import json
 from .desktop_files import DesktopFiles
 from .ui import DockUI
 
@@ -91,6 +92,11 @@ def call(command=""):
         client.send(command.encode())
         client.close()
         return
+
+
+def list(search_apps=[]):
+    items = DesktopFiles(search_apps)
+    print(json.dumps(items, indent=4))
 
 
 def launch(search_apps=[], show=False):
