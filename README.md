@@ -13,6 +13,7 @@ A customizable dock UI for launching applications with actions, mainly designed 
 1. Clone the repository:
     ```sh
     git clone https://github.com/SRCthird/qtile_dock.git
+    mv qtile_dock/autostart.py ~/.config/qtile/autostart.py
     ```
 
 2. Install the required dependencies:
@@ -55,9 +56,7 @@ from libqtile import hook
 
 @hook.subscribe.startup_once
 def autostart():
-    # Launch the dock with specific applications
-    search_apps = ["wezterm", "steam", "google chrome"]
-    qtile_dock.launch(search_apps, show=True)
+    subprocess.Popen(["python", "~/.config/qtile/autostart.py"])
 
 keys = [
     # Toggle the dock visibility
