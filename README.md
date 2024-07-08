@@ -58,13 +58,26 @@ from libqtile import hook
 def autostart():
     subprocess.Popen(["python", "~/.config/qtile/autostart.py"])
 
+@lazy.function
+def toggle_dock(qtile):
+    qtile_dock.call("toggle")
+
+@lazy.function
+def kill_dock(qtile):
+    qtile_dock.call("stop")
+
 keys = [
     # Toggle the dock visibility
-    Key(["mod1"], "o", qtile_dock.call("toggle")),
+    Key(["mod1"], "o", toggle_dock),
 
     # Kill the dock
-    Key(["mod1"], "q", qtile_dock.call("stop")),
+    Key(["mod1"], "q", kill_dock),
 ]
+```
+
+Alternativly, if you have an autostart.sh already set up you can do this:
+```bash
+python autostart.py&
 ```
 
 ## Contributing
