@@ -78,7 +78,7 @@ def start_application(search_apps=[], show=False):
     server_thread = threading.Thread(target=run_server, args=(dock,))
     server_thread.start()
 
-    sys.exit(app.exec_())
+    app.exec_()
 
     stop_flag.set()
     server_thread.join()
@@ -90,7 +90,7 @@ def call(command=""):
         client.connect(("127.0.0.1", PORT))
         client.send(command.encode())
         client.close()
-        sys.exit(0)
+        return
 
 
 def launch(search_apps=[], show=False):
