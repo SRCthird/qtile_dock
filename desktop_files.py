@@ -16,7 +16,8 @@ class DesktopFiles:
         for icon_dir in icon_dirs:
             for root, dirs, files in os.walk(icon_dir):
                 for file in files:
-                    if file.startswith(icon_name) and file.endswith(('.svg', '.png', '.xpm')):
+                    base_name, ext = os.path.splitext(file)
+                    if base_name == icon_name and ext in ('.svg', '.png', '.xpm'):
                         return os.path.join(root, file)
         return None
 
