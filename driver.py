@@ -95,7 +95,7 @@ def call(command=""):
 
 
 def list(search_apps=[]):
-    items = DesktopFiles(search_apps)
+    items = DesktopFiles(search_apps).get()
     print(json.dumps(items, indent=4))
 
 
