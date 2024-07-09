@@ -1,3 +1,4 @@
+import os
 import subprocess
 import tempfile
 import cairosvg
@@ -36,13 +37,11 @@ class DockUI(QtWidgets.QWidget):
                             QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.Tool)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
 
+        css_path = os.path.join(os.path.dirname(__file__), 'styles.css')
+        with open(css_path, 'r') as f:
+            self.setStyleSheet(f.read())
+
         self.frame = QtWidgets.QFrame(self)
-        self.frame.setStyleSheet("""
-            QFrame {
-                background-color: #333;
-                border-radius: 20px;
-            }
-        """)
         self.layout = QtWidgets.QHBoxLayout(self.frame)
         self.layout.setContentsMargins(20, 20, 20, 20)
         self.layout.setSpacing(10)
@@ -58,8 +57,6 @@ class DockUI(QtWidgets.QWidget):
                 btn.setIcon(QtGui.QIcon(icon_path))
                 btn.setIconSize(QtCore.QSize(64, 64))
                 btn.setFixedSize(74, 74)
-                btn.setStyleSheet(
-                    "border-radius: 10px; border: none; background-color: #333;")
                 btn.clicked.connect(
                     lambda _, cmd=app["Main Entry"]["Exec"]: self.launch_app(cmd))
                 self.layout.addWidget(btn)
@@ -93,24 +90,7 @@ class DockUI(QtWidgets.QWidget):
 
     def show_actions_menu(self, actions):
         menu = QtWidgets.QMenu()
-        menu.setStyleSheet("""
-            QMenu {
-                background-color: #333;
-                color: white;
-                border: 1px solid white;
-                border-radius: 10px;
-                padding: 5px;
-            }
-            QMenu::item {
-                background-color: transparent;
-                padding: 5px 10px;
-                margin: 5px;
-                border-radius: 5px;
-            }
-            QMenu::item:selected {
-                background-color: #444;
-            }
-        """)
+        menu.setStyleSheet(self.styleSheet())
 
         for action in actions:
             action_name = action["Name"]
@@ -145,11 +125,10 @@ class DockUI(QtWidgets.QWidget):
     def update_selection(self):
         for i, (btn, _) in enumerate(self.buttons):
             if i == self.selected_index:
-                btn.setStyleSheet(
-                    "border-radius: 10px; border: 2px solid #FFF; background-color: #333;")
+                btn.setProperty("selected", True)
             else:
-                btn.setStyleSheet(
-                    "border-radius: 10px; border: none; background-color: #333;")
+                btn.setProperty("selected", False)
+            btn.setStyle(btn.style())  # Update style to reflect property change
 
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_Right:
@@ -170,3 +149,4 @@ class DockUI(QtWidgets.QWidget):
     def handle_stop_signal(self):
         print("Stopping the application...")
         QtWidgets.QApplication.quit()
+
