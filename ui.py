@@ -25,10 +25,11 @@ def scale_image(image_path, size=(64, 64)):
 class DockUI(QtWidgets.QWidget):
     stop_signal = QtCore.pyqtSignal()
 
-    def __init__(self, apps, non_root_user=None):
+    def __init__(self, apps, config, non_root_user=None):
         super().__init__()
         self.non_root_user = non_root_user
         self.apps = apps
+        self.config = config
         self.initUI(apps)
         self.stop_signal.connect(self.handle_stop_signal)
 
@@ -37,8 +38,7 @@ class DockUI(QtWidgets.QWidget):
                             QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.Tool)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
 
-        css_path = os.path.join(os.path.dirname(__file__), 'styles.css')
-        with open(css_path, 'r') as f:
+        with open(self.config, 'r') as f:
             self.setStyleSheet(f.read())
 
         self.frame = QtWidgets.QFrame(self)

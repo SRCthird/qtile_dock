@@ -1,3 +1,4 @@
+import os
 import sys
 import socket
 import threading
@@ -67,12 +68,12 @@ def run_server(dock):
             thread.join()
 
 
-def start_application(search_apps=[], show=False):
+def start_application(search_apps=[], show=False, config=None):
     app = QtWidgets.QApplication(sys.argv)
 
     icons = DesktopFiles(search_apps).get()
 
-    dock = DockUI(icons)
+    dock = DockUI(icons, config)
     if show:
         dock.toggle_visibility()
 
@@ -99,7 +100,9 @@ def list(search_apps=[]):
     print(json.dumps(items, indent=4))
 
 
-def launch(search_apps=[], show=False):
+def launch(search_apps=[], show=False, config=None):
     if is_another_instance_running():
         return
-    start_application(search_apps, show)
+    if config is None:
+        config = os.path.join(os.path.dirname(__file__), 'styles.css')
+    start_application(search_apps, show, config)
